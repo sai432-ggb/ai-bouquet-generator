@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Bouquet Generator</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@200;300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="grain"></div>
+
+    <header>
+        <div class="logo">
+            <span class="logo-icon">✿</span>
+            <span class="logo-text">Floragenix</span>
+        </div>
+        <nav>
+            <a href="#" class="nav-link">Gallery</a>
+            <a href="#" class="nav-link">About</a>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="hero-text">
+                <p class="eyebrow">AI-Powered Floral Design</p>
+                <h1>Design Your<br><em>Perfect Bouquet</em></h1>
+                <p class="subtitle">Describe your vision and let our AI craft a bespoke floral arrangement tailored to your moment.</p>
+            </div>
+            <div class="hero-visual">
+                <div class="petal p1">❀</div>
+                <div class="petal p2">✿</div>
+                <div class="petal p3">❁</div>
+                <div class="petal p4">✾</div>
+                <div class="petal p5">❃</div>
+            </div>
+        </section>
+
+        <section class="generator">
+            <div class="form-panel">
+                <div class="form-group">
+                    <label>Describe your bouquet</label>
+                    <textarea id="prompt" placeholder="e.g. A romantic bouquet for a summer wedding with soft pinks and dusty whites..." rows="3"></textarea>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Occasion</label>
+                        <select id="occasion">
+                            <option value="General">General Gift</option>
+                            <option value="Wedding">Wedding</option>
+                            <option value="Anniversary">Anniversary</option>
+                            <option value="Birthday">Birthday</option>
+                            <option value="Sympathy">Sympathy</option>
+                            <option value="Graduation">Graduation</option>
+                            <option value="Congratulations">Congratulations</option>
+                            <option value="Valentine's Day">Valentine's Day</option>
+                            <option value="Mother's Day">Mother's Day</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Style</label>
+                        <select id="style">
+                            <option value="Classic">Classic Elegant</option>
+                            <option value="Wildflower">Wildflower Natural</option>
+                            <option value="Modern Minimalist">Modern Minimalist</option>
+                            <option value="Romantic Garden">Romantic Garden</option>
+                            <option value="Tropical Exotic">Tropical Exotic</option>
+                            <option value="Rustic Bohemian">Rustic Bohemian</option>
+                            <option value="Luxury Premium">Luxury Premium</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Color Palette</label>
+                    <div class="color-chips" id="colorChips">
+                        <div class="chip" data-color="Red" style="--c:#e74c3c">Red</div>
+                        <div class="chip" data-color="Pink" style="--c:#f1948a">Pink</div>
+                        <div class="chip" data-color="White" style="--c:#f9f9f7;border:1px solid #ccc">White</div>
+                        <div class="chip" data-color="Peach" style="--c:#f0b27a">Peach</div>
+                        <div class="chip" data-color="Yellow" style="--c:#f9e547">Yellow</div>
+                        <div class="chip" data-color="Purple" style="--c:#9b59b6">Purple</div>
+                        <div class="chip" data-color="Blue" style="--c:#5dade2">Blue</div>
+                        <div class="chip" data-color="Orange" style="--c:#e67e22">Orange</div>
+                        <div class="chip" data-color="Burgundy" style="--c:#922b21">Burgundy</div>
+                        <div class="chip" data-color="Lavender" style="--c:#c9b8e8">Lavender</div>
+                    </div>
+                </div>
+
+                <button id="generateBtn" class="btn-generate">
+                    <span class="btn-text">Generate Bouquet</span>
+                    <span class="btn-icon">✿</span>
+                </button>
+            </div>
+
+            <div class="result-panel" id="resultPanel">
+                <div class="result-placeholder" id="placeholder">
+                    <div class="placeholder-icon">❁</div>
+                    <p>Your bouquet will bloom here</p>
+                </div>
+
+                <div class="result-content" id="resultContent" style="display:none">
+                    <div class="bouquet-image-wrap" id="imageWrap">
+                        <img id="bouquetImage" src="" alt="Generated Bouquet" />
+                        <div class="image-fallback" id="imageFallback">
+                            <div class="fallback-icon">❀</div>
+                            <p>Visual preview unavailable</p>
+                            <small>Imagen API requires billing-enabled project</small>
+                        </div>
+                    </div>
+
+                    <div class="bouquet-info">
+                        <h2 id="bouquetName"></h2>
+                        <p id="bouquetDesc" class="bouquet-desc"></p>
+
+                        <div class="info-grid">
+                            <div class="info-item">
+                                <span class="info-label">Flowers</span>
+                                <span id="infoFlowers" class="info-value"></span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Colors</span>
+                                <span id="infoColors" class="info-value"></span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Style</span>
+                                <span id="infoStyle" class="info-value"></span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Symbolism</span>
+                                <span id="infoSymbolism" class="info-value"></span>
+                            </div>
+                        </div>
+
+                        <div class="care-box">
+                            <span class="care-label">🌿 Care Tips</span>
+                            <p id="infoCare"></p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="loading-state" id="loadingState" style="display:none">
+                    <div class="bloom-loader">
+                        <span>❀</span><span>✿</span><span>❁</span>
+                    </div>
+                    <p>Crafting your bouquet...</p>
+                </div>
+
+                <div class="error-state" id="errorState" style="display:none">
+                    <p id="errorMsg"></p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>Built with Gemini API · Vertex AI · Python Flask</p>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>
